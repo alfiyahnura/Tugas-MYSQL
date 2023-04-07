@@ -1,0 +1,207 @@
+Microsoft Windows [Version 10.0.19045.2728]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\Alfiyah>cd \xampp\mysql\bin
+
+C:\xampp\mysql\bin>mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 17
+Server version: 10.4.27-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> use dbtoko;
+Database changed
+MariaDB [dbtoko]> create table produk(
+    -> id int NOT NULL auto_increment primary key,
+    -> kode varchar(10) unique,
+    -> nama varchar(45),
+    -> harga_beli double,
+    -> harga_jual double,
+    -> stok int,
+    -> min_stok int,
+    -> jenis_produk_id int NOT NULL references kartu(id));
+Query OK, 0 rows affected (0.042 sec)
+
+MariaDB [dbtoko]> desc produk;
++-----------------+-------------+------+-----+---------+----------------+
+| Field           | Type        | Null | Key | Default | Extra          |
++-----------------+-------------+------+-----+---------+----------------+
+| id              | int(11)     | NO   | PRI | NULL    | auto_increment |
+| kode            | varchar(10) | YES  | UNI | NULL    |                |
+| nama            | varchar(45) | YES  |     | NULL    |                |
+| harga_beli      | double      | YES  |     | NULL    |                |
+| harga_jual      | double      | YES  |     | NULL    |                |
+| stok            | int(11)     | YES  |     | NULL    |                |
+| min_stok        | int(11)     | YES  |     | NULL    |                |
+| jenis_produk_id | int(11)     | NO   |     | NULL    |                |
++-----------------+-------------+------+-----+---------+----------------+
+8 rows in set (0.010 sec)
+
+MariaDB [dbtoko]> create pesanan_items(
+    -> id int NOT NULL auto_increment primary key,
+    -> produk_id int NOT NULL references kartu(id));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'pesanan_items(
+id int NOT NULL auto_increment primary key,
+produk_id int NOT ...' at line 1
+MariaDB [dbtoko]> create pesanan_items(
+    -> id int NOT NULL auto_increment primary key,
+    -> produk_id int NOT NULL references kartu(id),
+    -> pesanan_id int NOT NULL references kartu(id),
+    -> qty int,
+    -> harga double);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'pesanan_items(
+id int NOT NULL auto_increment primary key,
+produk_id int NOT ...' at line 1
+MariaDB [dbtoko]> create table pesanan_items(
+    -> id int NOT NULL auto_increment primary key,
+    -> produk_id int NOT NULL references kartu(id),
+    -> pesanan_id int NOT NULL references kartu(id),
+    -> qty int,
+    -> harga double);
+Query OK, 0 rows affected (0.022 sec)
+
+MariaDB [dbtoko]> desc pesanan_items;
++------------+---------+------+-----+---------+----------------+
+| Field      | Type    | Null | Key | Default | Extra          |
++------------+---------+------+-----+---------+----------------+
+| id         | int(11) | NO   | PRI | NULL    | auto_increment |
+| produk_id  | int(11) | NO   |     | NULL    |                |
+| pesanan_id | int(11) | NO   |     | NULL    |                |
+| qty        | int(11) | YES  |     | NULL    |                |
+| harga      | double  | YES  |     | NULL    |                |
++------------+---------+------+-----+---------+----------------+
+5 rows in set (0.013 sec)
+
+MariaDB [dbtoko]> create table vendor(
+    -> id int NOT NULL auto_increment primary key,
+    -> nomor varchar(4) unique,
+    -> nama varchar(40) NOT NULL,
+    -> kota varchar(30),
+    -> kontak varchar(30));
+Query OK, 0 rows affected (0.034 sec)
+
+MariaDB [dbtoko]> desc vendor;
++--------+-------------+------+-----+---------+----------------+
+| Field  | Type        | Null | Key | Default | Extra          |
++--------+-------------+------+-----+---------+----------------+
+| id     | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nomor  | varchar(4)  | YES  | UNI | NULL    |                |
+| nama   | varchar(40) | NO   |     | NULL    |                |
+| kota   | varchar(30) | YES  |     | NULL    |                |
+| kontak | varchar(30) | YES  |     | NULL    |                |
++--------+-------------+------+-----+---------+----------------+
+5 rows in set (0.011 sec)
+
+MariaDB [dbtoko]> create table pembelian(
+    -> id int NOT NULL auto_increment primary key,
+    -> tanggal varchar(45),
+    -> nomor varchar(10) unique,
+    -> produk_id int NOT NULL references kartu(id),
+    -> jumlah int,
+    -> harga double,
+    -> vendor_id int NOT NULL references kartu(id));
+Query OK, 0 rows affected (0.033 sec)
+
+MariaDB [dbtoko]> desc pembelian;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| id        | int(11)     | NO   | PRI | NULL    | auto_increment |
+| tanggal   | varchar(45) | YES  |     | NULL    |                |
+| nomor     | varchar(10) | YES  | UNI | NULL    |                |
+| produk_id | int(11)     | NO   |     | NULL    |                |
+| jumlah    | int(11)     | YES  |     | NULL    |                |
+| harga     | double      | YES  |     | NULL    |                |
+| vendor_id | int(11)     | NO   |     | NULL    |                |
++-----------+-------------+------+-----+---------+----------------+
+7 rows in set (0.012 sec)
+
+MariaDB [dbtoko]> show tables;
++------------------+
+| Tables_in_dbtoko |
++------------------+
+| jenis_produk     |
+| kartu            |
+| pelanggan        |
+| pembayaran       |
+| pembelian        |
+| pesanan          |
+| pesanan_items    |
+| produk           |
+| vendor           |
++------------------+
+9 rows in set (0.001 sec)
+
+MariaDB [dbtoko]> alter table pelanggan
+    -> add column alamat varchar(40) after nama;
+Query OK, 0 rows affected (0.025 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbtoko]> alter table pelanggan
+    -> change alamat alamat varchar (40);
+Query OK, 0 rows affected (0.013 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbtoko]> desc pelanggan;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| id        | int(11)     | NO   | PRI | NULL    | auto_increment |
+| kode      | varchar(10) | YES  | UNI | NULL    |                |
+| nama      | varchar(45) | YES  |     | NULL    |                |
+| alamat    | varchar(40) | YES  |     | NULL    |                |
+| jk        | char(1)     | YES  |     | NULL    |                |
+| tmp_lahir | varchar(20) | YES  |     | NULL    |                |
+| tgl_lahir | date        | YES  |     | NULL    |                |
+| email     | varchar(30) | YES  |     | NULL    |                |
+| kartu_id  | int(11)     | NO   |     | NULL    |                |
++-----------+-------------+------+-----+---------+----------------+
+9 rows in set (0.010 sec)
+
+MariaDB [dbtoko]> alter table pelanggan
+    -> change nama nama_pelanggan varchar(45);
+Query OK, 0 rows affected (0.012 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbtoko]> desc pelanggan;
++----------------+-------------+------+-----+---------+----------------+
+| Field          | Type        | Null | Key | Default | Extra          |
++----------------+-------------+------+-----+---------+----------------+
+| id             | int(11)     | NO   | PRI | NULL    | auto_increment |
+| kode           | varchar(10) | YES  | UNI | NULL    |                |
+| nama_pelanggan | varchar(45) | YES  |     | NULL    |                |
+| alamat         | varchar(40) | YES  |     | NULL    |                |
+| jk             | char(1)     | YES  |     | NULL    |                |
+| tmp_lahir      | varchar(20) | YES  |     | NULL    |                |
+| tgl_lahir      | date        | YES  |     | NULL    |                |
+| email          | varchar(30) | YES  |     | NULL    |                |
+| kartu_id       | int(11)     | NO   |     | NULL    |                |
++----------------+-------------+------+-----+---------+----------------+
+9 rows in set (0.010 sec)
+
+MariaDB [dbtoko]> alter table pelanggan
+    -> modify nama_pelanggan varchar(50);
+Query OK, 0 rows affected (0.017 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbtoko]> desc pelanggan;
++----------------+-------------+------+-----+---------+----------------+
+| Field          | Type        | Null | Key | Default | Extra          |
++----------------+-------------+------+-----+---------+----------------+
+| id             | int(11)     | NO   | PRI | NULL    | auto_increment |
+| kode           | varchar(10) | YES  | UNI | NULL    |                |
+| nama_pelanggan | varchar(50) | YES  |     | NULL    |                |
+| alamat         | varchar(40) | YES  |     | NULL    |                |
+| jk             | char(1)     | YES  |     | NULL    |                |
+| tmp_lahir      | varchar(20) | YES  |     | NULL    |                |
+| tgl_lahir      | date        | YES  |     | NULL    |                |
+| email          | varchar(30) | YES  |     | NULL    |                |
+| kartu_id       | int(11)     | NO   |     | NULL    |                |
++----------------+-------------+------+-----+---------+----------------+
+9 rows in set (0.011 sec)
+
+MariaDB [dbtoko]>
