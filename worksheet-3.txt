@@ -126,13 +126,14 @@ MariaDB [dbtoko]> select sum(tmp_lahir='jakarta') as jumlah from pelanggan;
 +--------+
 1 row in set (0.000 sec)
 
-MariaDB [dbtoko]> SELECT sum(stok + harga_jual < 10000) as total from produk;
-+-------+
-| total |
-+-------+
-|     2 |
-+-------+
-1 row in set (0.002 sec)
+MariaDB [dbtoko]> select sum(stok) as jml_stok from produk
+    -> where harga_jual < 10000;
++----------+
+| jml_stok |
++----------+
+|        5 |
++----------+
+1 row in set (0.000 sec)
 
 MariaDB [dbtoko]> select sum(kode like 'K%') as jumlah from produk;
 +--------+
