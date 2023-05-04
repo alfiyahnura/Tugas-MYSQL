@@ -1,0 +1,152 @@
+Microsoft Windows [Version 10.0.19045.2846]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\Alfiyah>cd \xampp\mysql\bin
+
+C:\xampp\mysql\bin>mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 109
+Server version: 10.4.27-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> use dbtoko;
+Database changed
+MariaDB [dbtoko]> delimiter $$
+MariaDB [dbtoko]> create procedure inputPelanggan(kode varchar(20), nama_pelanggan varchar(50))
+    -> begin
+    -> insert into pelanggan(kode,nama_pelanggan) values(kode,nama_pelanggan);
+    -> end$$
+Query OK, 0 rows affected (0.008 sec)
+
+MariaDB [dbtoko]> delimiter ;
+MariaDB [dbtoko]> select * from pelanggan;
++----+--------+----------------+--------+------+------------+------------+-------------------+----------+
+| id | kode   | nama_pelanggan | alamat | jk   | tmp_lahir  | tgl_lahir  | email             | kartu_id |
++----+--------+----------------+--------+------+------------+------------+-------------------+----------+
+|  1 | 011101 | Agung          | NULL   | L    | Bandung    | 1997-09-06 | agung@gmail.com   |        1 |
+|  4 | 011102 | Pandan Wangi   | NULL   | P    | Yokyakarta | 1998-08-07 | pandan@gmail.com  |        2 |
+|  5 | 011103 | Sekar          | NULL   | P    | Kediri     | 2001-09-08 | sekar@gmail.com   |        1 |
+|  6 | 011104 | Gayatri Putri  | NULL   | L    | Kediri     | 1997-09-08 | suandi@gmail.com  |        1 |
+|  7 | 011105 | Pradana        | NULL   | L    | Jakarta    | 2001-08-01 | pradana@gmail.com |        2 |
+|  8 | 011106 | Gayatri        | NULL   | P    | Jakarta    | 2002-09-01 | gayatri@gmail.com |        1 |
++----+--------+----------------+--------+------+------------+------------+-------------------+----------+
+6 rows in set (0.000 sec)
+
+MariaDB [dbtoko]> delimiter $$
+MariaDB [dbtoko]> select * from pelanggan;
+    -> $$
++----+--------+----------------+--------+------+------------+------------+-------------------+----------+
+| id | kode   | nama_pelanggan | alamat | jk   | tmp_lahir  | tgl_lahir  | email             | kartu_id |
++----+--------+----------------+--------+------+------------+------------+-------------------+----------+
+|  1 | 011101 | Agung          | NULL   | L    | Bandung    | 1997-09-06 | agung@gmail.com   |        1 |
+|  4 | 011102 | Pandan Wangi   | NULL   | P    | Yokyakarta | 1998-08-07 | pandan@gmail.com  |        2 |
+|  5 | 011103 | Sekar          | NULL   | P    | Kediri     | 2001-09-08 | sekar@gmail.com   |        1 |
+|  6 | 011104 | Gayatri Putri  | NULL   | L    | Kediri     | 1997-09-08 | suandi@gmail.com  |        1 |
+|  7 | 011105 | Pradana        | NULL   | L    | Jakarta    | 2001-08-01 | pradana@gmail.com |        2 |
+|  8 | 011106 | Gayatri        | NULL   | P    | Jakarta    | 2002-09-01 | gayatri@gmail.com |        1 |
++----+--------+----------------+--------+------+------------+------------+-------------------+----------+
+6 rows in set (0.000 sec)
+
+MariaDB [dbtoko]> create procedure showPelanggan()
+    -> begin
+    -> select kode, nama_pelanggan from pelanggan;
+    -> end
+    -> $$
+Query OK, 0 rows affected (0.016 sec)
+
+MariaDB [dbtoko]> delimiter ;
+MariaDB [dbtoko]> call showPelanggan();
++--------+----------------+
+| kode   | nama_pelanggan |
++--------+----------------+
+| 011101 | Agung          |
+| 011102 | Pandan Wangi   |
+| 011103 | Sekar          |
+| 011104 | Gayatri Putri  |
+| 011105 | Pradana        |
+| 011106 | Gayatri        |
++--------+----------------+
+6 rows in set (0.001 sec)
+
+Query OK, 0 rows affected (0.020 sec)
+
+MariaDB [dbtoko]> select * from produk;
++----+------+------------+------------+------------+------+----------+-----------------+
+| id | kode | nama       | harga_beli | harga_jual | stok | min_stok | jenis_produk_id |
++----+------+------------+------------+------------+------+----------+-----------------+
+|  1 | TV01 | TV         |    3000000 |    4000000 |    3 |        2 |               1 |
+|  2 | TV02 | TV 21 Inch |    2000000 |    3000000 |   10 |        3 |               1 |
+|  3 | K001 | Kulkas     |    4000000 |    5000000 |   10 |        3 |               1 |
+|  4 | M001 | Meja Makan |    1000000 |    2000000 |    4 |        2 |               4 |
+|  5 | T001 | Taro       |       4000 |       5000 |    3 |        2 |               2 |
++----+------+------------+------------+------------+------+----------+-----------------+
+5 rows in set (0.000 sec)
+
+MariaDB [dbtoko]> delimiter $$
+MariaDB [dbtoko]> create procedure inputProduk(nama varchar(20), harga varchar(50))
+    -> begin
+    -> insert into produk(nama,harga) values(nama,harga);
+    -> end$$
+Query OK, 0 rows affected (0.007 sec)
+
+MariaDB [dbtoko]> delimiter ;
+MariaDB [dbtoko]> select * from produk;
++----+------+------------+------------+------------+------+----------+-----------------+
+| id | kode | nama       | harga_beli | harga_jual | stok | min_stok | jenis_produk_id |
++----+------+------------+------------+------------+------+----------+-----------------+
+|  1 | TV01 | TV         |    3000000 |    4000000 |    3 |        2 |               1 |
+|  2 | TV02 | TV 21 Inch |    2000000 |    3000000 |   10 |        3 |               1 |
+|  3 | K001 | Kulkas     |    4000000 |    5000000 |   10 |        3 |               1 |
+|  4 | M001 | Meja Makan |    1000000 |    2000000 |    4 |        2 |               4 |
+|  5 | T001 | Taro       |       4000 |       5000 |    3 |        2 |               2 |
++----+------+------------+------------+------------+------+----------+-----------------+
+5 rows in set (0.000 sec)
+
+MariaDB [dbtoko]> delimiter $$
+MariaDB [dbtoko]> select * from produk;
+    -> $$
++----+------+------------+------------+------------+------+----------+-----------------+
+| id | kode | nama       | harga_beli | harga_jual | stok | min_stok | jenis_produk_id |
++----+------+------------+------------+------------+------+----------+-----------------+
+|  1 | TV01 | TV         |    3000000 |    4000000 |    3 |        2 |               1 |
+|  2 | TV02 | TV 21 Inch |    2000000 |    3000000 |   10 |        3 |               1 |
+|  3 | K001 | Kulkas     |    4000000 |    5000000 |   10 |        3 |               1 |
+|  4 | M001 | Meja Makan |    1000000 |    2000000 |    4 |        2 |               4 |
+|  5 | T001 | Taro       |       4000 |       5000 |    3 |        2 |               2 |
++----+------+------------+------------+------------+------+----------+-----------------+
+5 rows in set (0.000 sec)
+
+MariaDB [dbtoko]> create procedure showProduk()
+    -> begin
+    -> select nama, harga_beli, harga_jual from produk;
+    -> end
+    -> $$
+Query OK, 0 rows affected (0.014 sec)
+
+MariaDB [dbtoko]> delimiter ;
+MariaDB [dbtoko]> call showProduk;
++------------+------------+------------+
+| nama       | harga_beli | harga_jual |
++------------+------------+------------+
+| TV         |    3000000 |    4000000 |
+| TV 21 Inch |    2000000 |    3000000 |
+| Kulkas     |    4000000 |    5000000 |
+| Meja Makan |    1000000 |    2000000 |
+| Taro       |       4000 |       5000 |
++------------+------------+------------+
+5 rows in set (0.000 sec)
+
+Query OK, 0 rows affected (0.022 sec)
+
+MariaDB [dbtoko]> delimiter $$
+MariaDB [dbtoko]> CREATE PROCEDURE totalPesanan(in total double, in qty int, out total double)
+    -> begin
+    -> set total = total * qty;
+    -> select @total;
+    -> end$$
+Query OK, 0 rows affected (0.013 sec)
+
