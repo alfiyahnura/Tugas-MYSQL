@@ -1,0 +1,255 @@
+Microsoft Windows [Version 10.0.19045.2846]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\Alfiyah>cd \xampp\mysql\bin
+
+C:\xampp\mysql\bin>mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 305
+Server version: 10.4.27-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> use dbtoko;
+Database changed
+MariaDB [dbtoko]> select * from pesanan;
++----+------------+----------+--------------+
+| id | tanggal    | total    | pelanggan_id |
++----+------------+----------+--------------+
+|  1 | 2023-05-14 |   200000 |            1 |
+|  2 | 2022-12-15 |   300000 |            1 |
+|  3 | 2023-05-13 |  8000000 |            2 |
+|  4 | 2023-05-15 |   500000 |            3 |
+|  5 | 2023-12-14 | 10000000 |            4 |
++----+------------+----------+--------------+
+5 rows in set (0.000 sec)
+
+MariaDB [dbtoko]> desc pembayaran;
++------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| id         | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nokuitansi | varchar(10) | YES  | UNI | NULL    |                |
+| tanggal    | date        | YES  |     | NULL    |                |
+| jumlah     | double      | YES  |     | NULL    |                |
+| ke         | int(11)     | YES  |     | NULL    |                |
+| pesanan_id | int(11)     | NO   |     | NULL    |                |
++------------+-------------+------+-----+---------+----------------+
+6 rows in set (0.010 sec)
+
+MariaDB [dbtoko]> ALTER TABLE pembayaran ADD status_pembayaran varchar (50);
+Query OK, 0 rows affected (0.012 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbtoko]> desc pembayaran;
++-------------------+-------------+------+-----+---------+----------------+
+| Field             | Type        | Null | Key | Default | Extra          |
++-------------------+-------------+------+-----+---------+----------------+
+| id                | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nokuitansi        | varchar(10) | YES  | UNI | NULL    |                |
+| tanggal           | date        | YES  |     | NULL    |                |
+| jumlah            | double      | YES  |     | NULL    |                |
+| ke                | int(11)     | YES  |     | NULL    |                |
+| pesanan_id        | int(11)     | NO   |     | NULL    |                |
+| status_pembayaran | varchar(50) | YES  |     | NULL    |                |
++-------------------+-------------+------+-----+---------+----------------+
+7 rows in set (0.010 sec)
+
+MariaDB [dbtoko]> update pembayaran set status_pembayaran = 'Lunas' where id=1;
+Query OK, 1 row affected (0.003 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbtoko]> update pembayaran set status_pembayaran = 'Belum' where id=2;
+Query OK, 1 row affected (0.003 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbtoko]> update pembayaran set status_pembayaran = 'Lunas' where id=3;
+Query OK, 1 row affected (0.004 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbtoko]> select * from pembayaran;
++----+------------+------------+---------+------+------------+-------------------+
+| id | nokuitansi | tanggal    | jumlah  | ke   | pesanan_id | status_pembayaran |
++----+------------+------------+---------+------+------------+-------------------+
+|  1 | 011        | 2023-05-06 |  200000 |    1 |          1 | Lunas             |
+|  2 | 012        | 2023-05-05 | 8000000 |    2 |          3 | Belum             |
+|  3 | 13         | 2023-05-01 |  300000 |    1 |          2 | Lunas             |
++----+------------+------------+---------+------+------------+-------------------+
+3 rows in set (0.000 sec)
+
+MariaDB [dbtoko]> update pembayaran set nokuitansi = '013' where id=3;
+Query OK, 1 row affected (0.003 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbtoko]> select * from pembayaran;
++----+------------+------------+---------+------+------------+-------------------+
+| id | nokuitansi | tanggal    | jumlah  | ke   | pesanan_id | status_pembayaran |
++----+------------+------------+---------+------+------------+-------------------+
+|  1 | 011        | 2023-05-06 |  200000 |    1 |          1 | Lunas             |
+|  2 | 012        | 2023-05-05 | 8000000 |    2 |          3 | Belum             |
+|  3 | 013        | 2023-05-01 |  300000 |    1 |          2 | Lunas             |
++----+------------+------------+---------+------+------------+-------------------+
+3 rows in set (0.000 sec)
+
+MariaDB [dbtoko]> desc pesanan;
++--------------+---------+------+-----+---------+-------+
+| Field        | Type    | Null | Key | Default | Extra |
++--------------+---------+------+-----+---------+-------+
+| id           | int(11) | NO   | PRI | NULL    |       |
+| tanggal      | date    | YES  |     | NULL    |       |
+| total        | double  | YES  |     | NULL    |       |
+| pelanggan_id | int(11) | NO   |     | NULL    |       |
++--------------+---------+------+-----+---------+-------+
+4 rows in set (0.012 sec)
+
+MariaDB [dbtoko]> ALTER TABLE pembayaran ADD bayar varchar (50);
+Query OK, 0 rows affected (0.027 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbtoko]> desc pesanan;
++--------------+---------+------+-----+---------+-------+
+| Field        | Type    | Null | Key | Default | Extra |
++--------------+---------+------+-----+---------+-------+
+| id           | int(11) | NO   | PRI | NULL    |       |
+| tanggal      | date    | YES  |     | NULL    |       |
+| total        | double  | YES  |     | NULL    |       |
+| pelanggan_id | int(11) | NO   |     | NULL    |       |
++--------------+---------+------+-----+---------+-------+
+4 rows in set (0.011 sec)
+
+MariaDB [dbtoko]> ALTER TABLE pesanan ADD bayar varchar (50);
+Query OK, 0 rows affected (0.032 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbtoko]> desc pesanan;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| id           | int(11)     | NO   | PRI | NULL    |       |
+| tanggal      | date        | YES  |     | NULL    |       |
+| total        | double      | YES  |     | NULL    |       |
+| pelanggan_id | int(11)     | NO   |     | NULL    |       |
+| bayar        | varchar(50) | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+5 rows in set (0.012 sec)
+
+MariaDB [dbtoko]> ALTER TABLE pembayaran DROP bayar;
+Query OK, 0 rows affected (0.010 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [dbtoko]> desc pembayaran;
++-------------------+-------------+------+-----+---------+----------------+
+| Field             | Type        | Null | Key | Default | Extra          |
++-------------------+-------------+------+-----+---------+----------------+
+| id                | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nokuitansi        | varchar(10) | YES  | UNI | NULL    |                |
+| tanggal           | date        | YES  |     | NULL    |                |
+| jumlah            | double      | YES  |     | NULL    |                |
+| ke                | int(11)     | YES  |     | NULL    |                |
+| pesanan_id        | int(11)     | NO   |     | NULL    |                |
+| status_pembayaran | varchar(50) | YES  |     | NULL    |                |
++-------------------+-------------+------+-----+---------+----------------+
+7 rows in set (0.011 sec)
+
+MariaDB [dbtoko]> update pesanan set bayar = 'sudah' where id=1;
+Query OK, 1 row affected (0.003 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbtoko]> update pesanan set bayar = 'sudah' where id=2;
+Query OK, 1 row affected (0.002 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbtoko]> update pesanan set bayar = 'belum' where id=3;
+Query OK, 1 row affected (0.004 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbtoko]> update pesanan set bayar = 'sudah' where id=4;
+Query OK, 1 row affected (0.004 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbtoko]> update pesanan set bayar = 'belum' where id=5;
+Query OK, 1 row affected (0.004 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [dbtoko]> select * from pesanan;
++----+------------+----------+--------------+-------+
+| id | tanggal    | total    | pelanggan_id | bayar |
++----+------------+----------+--------------+-------+
+|  1 | 2023-05-14 |   200000 |            1 | sudah |
+|  2 | 2022-12-15 |   300000 |            1 | sudah |
+|  3 | 2023-05-13 |  8000000 |            2 | belum |
+|  4 | 2023-05-15 |   500000 |            3 | sudah |
+|  5 | 2023-12-14 | 10000000 |            4 | belum |
++----+------------+----------+--------------+-------+
+5 rows in set (0.000 sec)
+
+MariaDB [dbtoko]> delimiter $$
+MariaDB [dbtoko]> create trigger proses_pembayaran before insert on pesanan
+    -> for each row
+    -> begin
+    -> set @status_pembayaran = (select status_pembayaran from pembayaran where id = new.pembayaran_id);
+    -> set @proses = new.bayar;
+    -> if @proses = 'sudah' then
+    -> set @status_pembayaran = 'Lunas';
+    -> if @proses = 'belum' then
+    -> set @status_pembayaran = 'Belum';
+    -> end if;
+    -> update pembayaran set status_pembayaran = @proses where id = new.pembayaran_id;
+    -> end if;
+    -> end;
+    -> $$
+Query OK, 0 rows affected (0.013 sec)
+
+MariaDB [dbtoko]> select * from pembayaran;
+    -> $$
++----+------------+------------+---------+------+------------+-------------------+
+| id | nokuitansi | tanggal    | jumlah  | ke   | pesanan_id | status_pembayaran |
++----+------------+------------+---------+------+------------+-------------------+
+|  1 | 011        | 2023-05-06 |  200000 |    1 |          1 | Lunas             |
+|  2 | 012        | 2023-05-05 | 8000000 |    2 |          3 | Belum             |
+|  3 | 013        | 2023-05-01 |  300000 |    1 |          2 | Lunas             |
++----+------------+------------+---------+------+------------+-------------------+
+3 rows in set (0.000 sec)
+
+MariaDB [dbtoko]> delimiter ;
+MariaDB [dbtoko]> select * from pesanan;
++----+------------+----------+--------------+-------+---------------+
+| id | tanggal    | total    | pelanggan_id | bayar | pembayaran_id |
++----+------------+----------+--------------+-------+---------------+
+|  1 | 2023-05-14 |   200000 |            1 | sudah |             1 |
+|  2 | 2022-12-15 |   300000 |            1 | sudah |             1 |
+|  3 | 2023-05-13 |  8000000 |            2 | belum |             3 |
+|  4 | 2023-05-15 |   500000 |            3 | sudah |             2 |
+|  5 | 2023-12-14 | 10000000 |            4 | belum |             3 |
++----+------------+----------+--------------+-------+---------------+
+5 rows in set (0.002 sec)
+
+MariaDB [dbtoko]> insert into pembayaran (nokuitansi,tanggal,jumlah,ke,pesanan_id,status_pembayaran) values
+    -> ('012,'2023-05-05',8000000,2,'sudah');
+Query OK, 1 row affected, 1 warning (0.003 sec)
+
+MariaDB [dbtoko]> select * from pembayaran;
++----+------------+------------+---------+------+------------+-------------------+
+| id | nokuitansi | tanggal    | jumlah  | ke   | pesanan_id | status_pembayaran |
++----+------------+------------+---------+------+------------+-------------------+
+|  1 | 011        | 2023-05-06 |  200000 |    1 |          1 | Lunas             |
+|  2 | 012        | 2023-05-05 | 8000000 |    2 |          3 | Lunas             |
+|  3 | 013        | 2023-05-01 |  300000 |    1 |          2 | Lunas             |
++----+------------+------------+---------+------+------------+-------------------+
+3 rows in set (0.001 sec)
+
+MariaDB [dbtoko]> select * from pesanan;
++----+------------+----------+--------------+---------+
+| id | tanggal    | total    | pelanggan_id | dibayar |
++----+------------+----------+--------------+---------+
+|  1 | 2023-05-14 |   200000 |            1 | sudah   |
+|  2 | 2022-12-15 |   300000 |            1 | sudah   |
+|  3 | 2023-05-13 |  8000000 |            2 | belum   |
+|  4 | 2023-05-15 |   500000 |            3 | sudah   |
+|  5 | 2023-12-14 | 10000000 |            4 | belum   |
+|  6 | 2023-05-02 |  8000000 |            2 | sudah   |
++----+------------+----------+--------------+---------+
+6 rows in set (0.000 sec)
